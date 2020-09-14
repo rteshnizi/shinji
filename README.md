@@ -18,6 +18,7 @@
 ### Service Endpoints
 | Route | Method | Description | Parameters | Response |
 |-|-|-|-|-|
+| /init | GET | Initializes the service with default test data | N/A | A JSON string of the error if an exception occurred, empty string otherwise. |
 | / | GET | Get all groups | N/A | JSON object of all groups and words |
 | /save | GET | Save changes to a local file on the server | N/A | A JSON string of the error if an exception occurred, empty string otherwise. |
 | /load | GET | Load groups from a local file on the server | N/A | A JSON string of the error if an exception occurred, empty string otherwise. |

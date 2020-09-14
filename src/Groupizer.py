@@ -28,6 +28,9 @@ class Groupizer:
 			self.allWords = parser.words
 			self._build()
 
+	def __repr__(self):
+		return "Groupizer: %d words" % len(self.allWords)
+
 	def _buildMinGroups(self, words: List[str]) -> Dict[str, List[str]]:
 		"""
 		Deprecation Note
