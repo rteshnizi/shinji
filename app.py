@@ -55,3 +55,12 @@ def addToGroup(groupName, word):
 	A JSON string of the error if an exception occurred, empty string otherwise.
 	"""
 	return flask.jsonify(app.groupizer.addToGroup(groupName, word))
+
+@app.route("/createGroup/<groupName>")
+def createGroup(groupName):
+	"""
+	Returns
+	===
+	A JSON string of the error if an exception occurred, empty string otherwise.
+	"""
+	return flask.jsonify(app.groupizer.createGroup(groupName))
