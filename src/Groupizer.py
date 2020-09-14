@@ -145,8 +145,9 @@ class Groupizer:
 		"""
 		try:
 			if groupName in self.groups.keys():
-				print("Group '%s' already exists.")
-				return ""
+				msg = "Group '%s' already exists." % groupName
+				print(msg)
+				return msg
 			print("Created group: '%s'" % groupName)
 			self.groups[groupName] = []
 			self._dirty = True

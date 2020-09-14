@@ -26,7 +26,10 @@ def getGroups():
 	JSON object of all groups and words
 	"""
 	if app.groupizer is None:
-		raise NotInitialized()
+		try:
+			apr.groupizer = Groupizer(load=True)
+		except Exception as err:
+			raise GenericError(err.message)
 	return flask.jsonify(app.groupizer.groups)
 
 @app.route("/save")
