@@ -122,8 +122,7 @@ class Groupizer:
 		"""
 		try:
 			if groupName not in self.groups.keys():
-				newList = []
-				self.createGroup(groupName, newList)
+				self.createGroup(groupName)
 			isNewWord = word not in self._wordToGroupMap.keys()
 			if isNewWord:
 				print("Adding '%s' to group '%s'" % (word, groupName))
@@ -138,15 +137,18 @@ class Groupizer:
 		except Exception as err:
 			return repr(err)
 
-	def createGroup(self, groupName, listOfWords) -> str:
+	def createGroup(self, groupName) -> str:
 		"""
 		Returns
 		===
 		Error string if an exception occurred, empty string otherwise.
 		"""
 		try:
+			if groupName in self.groups.keys():
+				print("Group '%s' already exists.")
+				return ""
 			print("Created group: '%s'" % groupName)
-			self.groups[groupName] = listOfWords
+			self.groups[groupName] = []
 			self._dirty = True
 			return ""
 		except Exception as err:
