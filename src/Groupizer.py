@@ -69,6 +69,11 @@ class Groupizer:
 				i += 1
 
 	def _groupName(self, index1, index2) -> str:
+		"""
+		Given two indices of the words in the array,
+		this method finds the longest common prefix between the two.
+		**Note**: This method assumes that the array of words is sorted.
+		"""
 		maxIndex = len(self.allWords) - 1
 		if index1 > maxIndex and index2 > maxIndex: return None
 		if index1 > maxIndex: return self.allWords[index2]
@@ -96,6 +101,14 @@ class Groupizer:
 	def _build(self) -> Dict[str, List[str]]:
 		"""
 		Given the list of words, populate the dictionary of the group names to the words in the group.
+		The time complexity is O(n log n) because of the sort operation.
+
+		To populate the groups, we iterate the sorted array, comparing it to the previous and next words.
+		Whichever yields a longer prefix is then used as the group for this word.
+		This logic holds because the array is sorted.
+
+		Notice that, if a word does not belong to a group, a group is made whose name is the same as the word.
+		This is intentional, as keeping the data uniform, will make consuming of the data more predictable.
 		"""
 		self.allWords.sort()
 		i = 0
@@ -181,6 +194,9 @@ class Groupizer:
 
 	def save(self) -> str:
 		"""
+		Save the in-memory data to a JSON file.
+		If later it is decided that the data should be stored in a different database, the implementation can be adapted.
+
 		Returns
 		===
 		Error string if an exception occurred, empty string otherwise.
@@ -202,6 +218,8 @@ class Groupizer:
 
 	def load(self) -> str:
 		"""
+		If a JSON file is available that holds the stored data (persistent data), it is loaded into memory.
+
 		Returns
 		===
 		Error string if an exception occurred, empty string otherwise.
