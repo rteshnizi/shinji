@@ -54,7 +54,7 @@ In a realistic scenario, if the amount of data is large, the implementation shou
 
 The logic of this application is implemented under two main modules:
 * **Parser**: this module deals with the input file. Although very minimal, it provides extensibility of the software.
-For example, if the next version of the input file, uses JSON format, the logic can be added/encapsulated in this module.
+For example, if the next version of the input file uses JSON format, the logic can be added/encapsulated in this module.
 * **GroupService**: this module acts as an intermediary component between the consumer (e.g., CLI, HTTP handler, etc.) and the data.
 It attempts to implement a service layer design pattern.
 The consumer, therefore, does not ever see the actual data source.

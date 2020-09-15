@@ -10,7 +10,7 @@ app.parser = None
 app.groupService: GroupService = None
 
 @app.errorhandler(GenericError)
-def handle_invalid_usage(error):
+def handleError(error):
 	response = flask.jsonify(error.to_dict())
 	response.status_code = error.status_code
 	return response

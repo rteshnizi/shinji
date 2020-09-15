@@ -103,12 +103,12 @@ class GroupService:
 		Given the list of words, populate the dictionary of the group names to the words in the group.
 		The time complexity is O(n log n) because of the sort operation.
 
-		To populate the groups, we iterate the sorted array, comparing it to the previous and next words.
+		To populate the groups, we iterate the sorted array, comparing each word to the previous and next words.
 		Whichever yields a longer prefix is then used as the group for this word.
 		This logic holds because the array is sorted.
 
 		Notice that, if a word does not belong to a group, a group is made whose name is the same as the word.
-		This is intentional, as keeping the data uniform, will make consuming of the data more predictable.
+		This is intentional, as keeping the data uniform will make consuming of the data more predictable.
 		"""
 		self.allWords.sort()
 		i = 0
