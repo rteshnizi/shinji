@@ -21,4 +21,4 @@ class GenericError(Exception):
 
 class NotInitialized(GenericError):
 	def __init__(self):
-		super().__init__("GroupService was not intialized. You might want to call /init first.")
+		super().__init__("GroupService was not intialized. You should call /init or /load first.")

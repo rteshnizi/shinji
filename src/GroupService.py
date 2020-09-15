@@ -98,7 +98,7 @@ class GroupService:
 		prefix = prefix if broke else word1
 		return prefix
 
-	def _build(self) -> Dict[str, List[str]]:
+	def _build(self, verbose=False) -> Dict[str, List[str]]:
 		"""
 		Given the list of words, populate the dictionary of the group names to the words in the group.
 		The time complexity is O(n log n) because of the sort operation.
@@ -114,7 +114,7 @@ class GroupService:
 		i = 0
 		while i < len(self.allWords):
 			word = self.allWords[i]
-			print("Finding group for '%s'" % word)
+			if verbose: print("Finding group for '%s'" % word)
 			group1 = self._groupName(i - 1, i)
 			group2 = self._groupName(i, i + 1)
 			if group1 is None and group2 is None: raise RuntimeError("WTF?")
@@ -126,10 +126,10 @@ class GroupService:
 				selectedGroup = group1 if len(group1) > len(group2) else group2
 			if not selectedGroup:
 				selectedGroup = word
-			self.addToGroup(selectedGroup, word)
+			self.addToGroup(selectedGroup, word, verbose)
 			i += 1
 
-	def addToGroup(self, groupName, word) -> str:
+	def addToGroup(self, groupName, word, verbose=True) -> str:
 		"""
 		Returns
 		===
@@ -137,13 +137,13 @@ class GroupService:
 		"""
 		try:
 			if groupName not in self.groups.keys():
-				self.createGroup(groupName)
+				self.createGroup(groupName, verbose)
 			isNewWord = word not in self._wordToGroupMap.keys()
 			if isNewWord:
-				print("Adding '%s' to group '%s'" % (word, groupName))
+				if verbose: print("Adding '%s' to group '%s'" % (word, groupName))
 			else:
 				oldGroup = self._wordToGroupMap[word]
-				print("Moving '%s' from group '%s to '%s'" % (word, oldGroup, groupName))
+				if verbose: print("Moving '%s' from group '%s to '%s'" % (word, oldGroup, groupName))
 				self.groups[oldGroup].remove(word)
 			self.groups[groupName].append(word)
 			self._wordToGroupMap[word] = groupName
@@ -152,7 +152,7 @@ class GroupService:
 		except Exception as err:
 			return repr(err)
 
-	def createGroup(self, groupName) -> str:
+	def createGroup(self, groupName, verbose=True) -> str:
 		"""
 		Returns
 		===
@@ -161,10 +161,10 @@ class GroupService:
 		try:
 			if groupName in self.groups.keys():
 				msg = "Group '%s' already exists." % groupName
-				print(msg)
+				if verbose: print(msg)
 				return msg
 			self.groups[groupName] = []
-			print("Created group: '%s'" % groupName)
+			if verbose: print("Created group: '%s'" % groupName)
 			self._dirty = True
 			return ""
 		except Exception as err:
