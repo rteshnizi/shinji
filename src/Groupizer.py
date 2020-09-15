@@ -2,6 +2,7 @@ import json
 import os
 from typing import List, Dict
 from src.Parser import Parser
+from src.Utils.FlaskErrors import GenericError, NotInitialized
 
 class Groupizer:
 	def __init__(self, load, parser: Parser=None, delimiter="_", dataFolder="data", fileName="Groupizer.json"):
@@ -21,7 +22,8 @@ class Groupizer:
 		self.allWords: List[str]
 		if load:
 			print("Loading from file...")
-			self.load()
+			err = self.load()
+			if err: raise GenericError(err)
 			self.allWords = list(self._wordToGroupMap.keys())
 		else:
 			print("Grouping %d words..." % len(parser.words))
@@ -148,8 +150,30 @@ class Groupizer:
 				msg = "Group '%s' already exists." % groupName
 				print(msg)
 				return msg
-			print("Created group: '%s'" % groupName)
 			self.groups[groupName] = []
+			print("Created group: '%s'" % groupName)
+			self._dirty = True
+			return ""
+		except Exception as err:
+			return repr(err)
+
+	def deleteGroup(self, groupName) -> str:
+		"""
+		Returns
+		===
+		Error string if an exception occurred, empty string otherwise.
+		"""
+		try:
+			if groupName not in self.groups.keys():
+				msg = "Group '%s' does not exist." % groupName
+				print(msg)
+				return msg
+			if len(self.groups[groupName]) > 0:
+				msg = "Group '%s' is not empty." % groupName
+				print(msg)
+				return msg
+			del self.groups[groupName]
+			print("Deleted group: '%s'" % groupName)
 			self._dirty = True
 			return ""
 		except Exception as err:
@@ -185,10 +209,15 @@ class Groupizer:
 		try:
 			self.jsonPath = os.path.join(self._dataFolder, self._fileName)
 			self.jsonPath = os.path.abspath(self.jsonPath)
+			if not os.path.isfile(self.jsonPath):
+				print("%s does not exist to load from." % self.jsonPath)
+				raise NotInitialized()
 			with open(self.jsonPath, 'r') as jsonFile:
 				data = json.load(jsonFile)
 			self.groups = data["groups"]
 			self._wordToGroupMap = data["_wordToGroupMap"]
 			return ""
+		except NotInitialized as err:
+			raise err
 		except Exception as err:
 			return repr(err)
