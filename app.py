@@ -19,7 +19,7 @@ def init():
 	return flask.jsonify(repr(app.groupizer))
 
 @app.route("/")
-def getGroups():
+def getAll():
 	"""
 	Returns
 	===
@@ -31,6 +31,17 @@ def getGroups():
 		except Exception as err:
 			raise GenericError(err.message)
 	return flask.jsonify(app.groupizer.groups)
+
+@app.route("/group/<groupName>")
+def getGroup(groupName):
+	"""
+	Returns
+	===
+	JSON object of the group if it exists, empty string otherwise.
+	"""
+	if groupName not in app.groupizer.groups.keys(): return flask.jsonify("")
+	return flask.jsonify({ groupName: app.groupizer.groups[groupName] })
+
 
 @app.route("/save")
 def save():
