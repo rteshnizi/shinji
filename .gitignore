@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 Groupizer.json
+GroupService.json
 # VS Code is broken right now for me
 debug.log

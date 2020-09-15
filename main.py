@@ -1,5 +1,5 @@
 from src.Parser import Parser
-from src.Groupizer import Groupizer
+from src.GroupService import GroupService
 
 """
 For command line debugging
@@ -7,10 +7,10 @@ For command line debugging
 
 if __name__ == '__main__':
 	parser = Parser()
-	groupizer = Groupizer(load=False, parser=parser)
-	err = groupizer.save()
+	GroupService = GroupService(load=False, parser=parser)
+	err = GroupService.save()
 	if err: print("Error during save.")
-	err = groupizer.load()
+	err = GroupService.load()
 	if err: print("Error during load.")
-	groupizer = Groupizer(load=True)
+	GroupService = GroupService(load=True)
 	print("Ran with no errors")

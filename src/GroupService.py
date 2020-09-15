@@ -4,8 +4,8 @@ from typing import List, Dict
 from src.Parser import Parser
 from src.Utils.FlaskErrors import GenericError, NotInitialized
 
-class Groupizer:
-	def __init__(self, load, parser: Parser=None, delimiter="_", dataFolder="data", fileName="Groupizer.json"):
+class GroupService:
+	def __init__(self, load, parser: Parser=None, delimiter="_", dataFolder="data", fileName="GroupService.json"):
 		self._dataFolder = dataFolder
 		self._fileName = fileName
 		# Will be set to true upon adding/moving a word or group
@@ -31,7 +31,7 @@ class Groupizer:
 			self._build()
 
 	def __repr__(self):
-		return "Groupizer: %d words" % len(self.allWords)
+		return "GroupService: %d words" % len(self.allWords)
 
 	def _buildMinGroups(self, words: List[str]) -> Dict[str, List[str]]:
 		"""

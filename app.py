@@ -1,13 +1,13 @@
 import flask
 from flask_cors import CORS
 from src.Parser import Parser
-from src.Groupizer import Groupizer
+from src.GroupService import GroupService
 from src.Utils.FlaskErrors import GenericError, NotInitialized
 
 app = flask.Flask(__name__)
 CORS(app)
 app.parser = None
-app.groupizer: Groupizer = None
+app.GroupService: GroupService = None
 
 @app.errorhandler(GenericError)
 def handle_invalid_usage(error):
@@ -18,8 +18,8 @@ def handle_invalid_usage(error):
 @app.route("/init")
 def init():
 	app.parser = Parser()
-	app.groupizer = Groupizer(load=False, parser=app.parser)
-	return flask.jsonify(repr(app.groupizer))
+	app.GroupService = GroupService(load=False, parser=app.parser)
+	return flask.jsonify(repr(app.GroupService))
 
 @app.route("/")
 def getAll():
@@ -29,10 +29,10 @@ def getAll():
 	JSON object of all groups and words
 	"""
 	try:
-		app.groupizer = Groupizer(load=not app.parser, parser=app.parser)
+		app.GroupService = GroupService(load=not app.parser, parser=app.parser)
 	except Exception as err:
 		raise GenericError(err.message if hasattr(err, "message") else repr(err))
-	return flask.jsonify(app.groupizer.groups)
+	return flask.jsonify(app.GroupService.groups)
 
 @app.route("/group/<groupName>")
 def getGroup(groupName):
@@ -41,8 +41,8 @@ def getGroup(groupName):
 	===
 	JSON object of the group if it exists, empty object otherwise.
 	"""
-	if groupName not in app.groupizer.groups.keys(): return flask.jsonify(dict())
-	return flask.jsonify({ groupName: app.groupizer.groups[groupName] })
+	if groupName not in app.GroupService.groups.keys(): return flask.jsonify(dict())
+	return flask.jsonify({ groupName: app.GroupService.groups[groupName] })
 
 
 @app.route("/save")
@@ -52,7 +52,7 @@ def save():
 	===
 	A JSON string of the error if an exception occurred, empty string otherwise.
 	"""
-	return flask.jsonify(app.groupizer.save())
+	return flask.jsonify(app.GroupService.save())
 
 @app.route("/load")
 def load():
@@ -61,7 +61,7 @@ def load():
 	===
 	A JSON string of the error if an exception occurred, empty string otherwise.
 	"""
-	return flask.jsonify(app.groupizer.load())
+	return flask.jsonify(app.GroupService.load())
 
 @app.route("/add/<groupName>/<word>")
 def addToGroup(groupName, word):
@@ -70,7 +70,7 @@ def addToGroup(groupName, word):
 	===
 	A JSON string of the error if an exception occurred, empty string otherwise.
 	"""
-	return flask.jsonify(app.groupizer.addToGroup(groupName, word))
+	return flask.jsonify(app.GroupService.addToGroup(groupName, word))
 
 @app.route("/createGroup/<groupName>")
 def createGroup(groupName):
@@ -79,7 +79,7 @@ def createGroup(groupName):
 	===
 	A JSON string of the error if an exception occurred, empty string otherwise.
 	"""
-	return flask.jsonify(app.groupizer.createGroup(groupName))
+	return flask.jsonify(app.GroupService.createGroup(groupName))
 
 @app.route("/deleteGroup/<groupName>")
 def deleteGroup(groupName):
@@ -88,4 +88,4 @@ def deleteGroup(groupName):
 	===
 	A JSON string of the error if an exception occurred, empty string otherwise.
 	"""
-	return flask.jsonify(app.groupizer.deleteGroup(groupName))
+	return flask.jsonify(app.GroupService.deleteGroup(groupName))
